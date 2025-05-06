@@ -1,5 +1,6 @@
 using Helpers;
 using Interfaces;
+using ScriptableObjects.Chip;
 using UnityEngine;
 
 namespace GridSystem
@@ -21,7 +22,7 @@ namespace GridSystem
         
         protected Vector2Int _position;
     
-        public virtual void ConfigureSelf(int x, int y)
+        public virtual void ConfigureSelf(ChipConfig config, int x, int y)
         {
             _x = x;
             _y = y;

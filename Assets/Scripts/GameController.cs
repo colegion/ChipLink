@@ -4,15 +4,31 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] private int width, height;
+    
+    private static GameController _instance;
 
-    // Update is called once per frame
-    void Update()
+    public static GameController Instance
     {
-        
+        get
+        {
+            return _instance;
+        }
+    }
+    
+    public int GridWidth => width;
+    public int GridHeight => height;
+    
+    private void Awake()
+    {
+        if (_instance == null)
+        {
+            _instance = this;
+            DontDestroyOnLoad(this);
+        }
+        else if (_instance != this)
+        {
+            Destroy(gameObject);
+        }
     }
 }
