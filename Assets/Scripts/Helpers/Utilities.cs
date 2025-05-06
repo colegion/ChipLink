@@ -12,17 +12,21 @@ namespace Helpers
     public enum PoolableTypes
     {
         BaseTile,
-        
     }
 
     public enum ChipType
     {
-        
+        Circle,
+        Diamond,
+        Star,
+        Octagon,
     }
 
     [Serializable]
-    public class LevelDta
+    public class LevelData
     {
+        public int width;
+        public int height;
         public int remainingMoves;
         public int currentScore;
         public int targetScore;
