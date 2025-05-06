@@ -1,18 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
+using Helpers;
 using UnityEngine;
 
-public class IPoolable : MonoBehaviour
+namespace Interfaces
 {
-    // Start is called before the first frame update
-    void Start()
+    public interface IPoolable
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        public void OnPooled();
+        public void OnFetchFromPool();
+        public void OnReturnPool();
+        public PoolableTypes GetPoolableType();
+        public GameObject GetGameObject();
     }
 }

@@ -1,18 +1,38 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
-public class Utilities : MonoBehaviour
+namespace Helpers
 {
-    // Start is called before the first frame update
-    void Start()
+    public class Utilities : MonoBehaviour
+    {
+    }
+    
+    public enum PoolableTypes
+    {
+        BaseTile,
+        
+    }
+
+    public enum ChipType
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    [Serializable]
+    public class LevelDta
     {
-        
+        public int remainingMoves;
+        public int currentScore;
+        public int targetScore;
+        public List<TileData> tiles;
+    }
+
+    [Serializable]
+    public class TileData
+    {
+        public int xCoord, yCoord;
+        public ChipType chipType;
     }
 }
