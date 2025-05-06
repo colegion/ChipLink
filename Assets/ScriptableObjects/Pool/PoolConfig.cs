@@ -1,18 +1,20 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
+using Helpers;
 using UnityEngine;
 
-public class PoolConfig : MonoBehaviour
+namespace ScriptableObjects.Pool
 {
-    // Start is called before the first frame update
-    void Start()
+    [CreateAssetMenu(fileName = "GlobalPoolConfig", menuName = "ScriptableObjects/Pool/PoolConfig")]
+    public class PoolConfig : ScriptableObject
     {
-        
+        public List<PoolEntry> poolConfigs;
     }
 
-    // Update is called once per frame
-    void Update()
+    [Serializable]
+    public class PoolEntry
     {
-        
+        public PoolableTypes poolItemType;
+        public int poolCount;
     }
 }
