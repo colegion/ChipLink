@@ -33,7 +33,7 @@ namespace GridSystem
             Grid.PlaceTileToParentCell(this);
         }
     
-        public virtual void OnTap()
+        public void OnTap()
         {
        
         }
@@ -42,11 +42,6 @@ namespace GridSystem
         {
             SetPosition(position);
             tileView.MoveTowardsTarget(Grid.GetCell(_x, _y).GetTarget(), SetTransform);
-        }
-
-        public void MoveToOrder(Transform target)
-        {
-            tileView.MoveTowardsTarget(target, null);
         }
 
         public void SetLayer(int layer)
@@ -90,7 +85,6 @@ namespace GridSystem
         {
             return _position;
         }
-        
 
         public void OnPooled()
         {
