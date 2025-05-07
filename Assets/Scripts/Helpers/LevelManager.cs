@@ -11,8 +11,8 @@ namespace Helpers
 {
     public class LevelManager
     {
-        private const string DarkCellPath = "Prefabs/CellDark";
-        private const string LightCellPath = "Prefabs/CellLight";
+        private const string DarkCellPath = "Prefabs/BaseCell";
+        private const string LightCellPath = "Prefabs/BaseCell";
         private const string LevelDataResourcePath = "Levels/CurrentLevel";
         private const string PersistentLevelFolder = "Levels";
         private const string PersistentLevelFileName = "CurrentLevel.json";
