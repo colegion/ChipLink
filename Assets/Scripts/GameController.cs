@@ -8,6 +8,7 @@ using Grid = GridSystem.Grid;
 public class GameController : MonoBehaviour
 {
     [SerializeField] private Transform puzzleParent;
+    [SerializeField] private CameraController cameraController;
     [SerializeField] private int width, height;
 
     private LevelManager _levelManager;
@@ -43,6 +44,7 @@ public class GameController : MonoBehaviour
     {
         _grid = new Grid(width, height);
         ServiceLocator.Register(_grid);
+        cameraController.SetGridSize(width, height);
         _levelManager = new LevelManager(puzzleParent);
     }
 }
