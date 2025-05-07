@@ -164,6 +164,24 @@ namespace Helpers
             }
 
             Debug.Log($"[LevelManager] Created {width}x{height} grid of cells.");
+
+            CreateRandomBoard(width, height);
+        }
+
+        private void CreateRandomBoard(int width, int height)
+        {
+            var tileFactory = ServiceLocator.Get<TileFactory>();
+            var configManager = ServiceLocator.Get<ChipConfigManager>();
+            
+            for (int i = 0; i < width; i++)
+            {
+                for (int j = 0; j < height; j++)
+                {
+                    var randomConfig = configManager.GetRandomConfig();
+                    var tile = tileFactory.SpawnTileByConfig();
+                    tile.ConfigureSelf(randomConfig, i, j);
+                }
+            }
         }
 
         #endregion

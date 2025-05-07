@@ -28,9 +28,10 @@ public class Bootstrapper : MonoBehaviour
         ServiceLocator.Register(grid);
 
         var poolController = FindObjectOfType<PoolController>();
+        var tileFactory = FindObjectOfType<TileFactory>();
         
-
         ServiceLocator.Register(poolController);
+        ServiceLocator.Register(tileFactory);
         
         foreach (var injectable in FindObjectsOfType<MonoBehaviour>().OfType<IInjectable>())
         {

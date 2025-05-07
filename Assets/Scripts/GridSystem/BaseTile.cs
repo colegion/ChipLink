@@ -27,6 +27,7 @@ namespace GridSystem
             _x = x;
             _y = y;
             _position = new Vector2Int(x, y);
+            tileView.SetSprite(config.chipSprite);
             SetTransform();
 
             if(Grid == null) Grid = ServiceLocator.Get<Grid>();
@@ -35,7 +36,7 @@ namespace GridSystem
     
         public void OnTap()
         {
-       
+            
         }
 
         public void UpdatePosition(Vector2Int position)

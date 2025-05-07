@@ -9,8 +9,7 @@ namespace GridSystem
         [SerializeField] private GameObject visuals;
         [SerializeField] private SpriteRenderer tileRenderer;
         
-
-        public void UpdateSprite(Sprite sprite)
+        public void SetSprite(Sprite sprite)
         {
             tileRenderer.sprite = sprite;
         }
