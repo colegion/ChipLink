@@ -156,8 +156,8 @@ namespace Helpers
                 {
                     var prefab = (x + y) % 2 == 0 ? lightPrefab : darkPrefab;
 
-                    Vector3 cellPosition = new Vector3(x - xOffset, 0, y - yOffset);
-                    var cell = Object.Instantiate(prefab, cellPosition, Quaternion.identity, _parent);
+                    Vector3 cellPosition = new Vector3(x, 0, y);
+                    var cell = Object.Instantiate(prefab, cellPosition, prefab.transform.rotation, _parent);
 
                     cell.ConfigureSelf(x, y);
                 }

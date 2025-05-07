@@ -1,10 +1,17 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Helpers;
 using UnityEngine;
+using Grid = GridSystem.Grid;
 
 public class GameController : MonoBehaviour
 {
+    [SerializeField] private Transform puzzleParent;
     [SerializeField] private int width, height;
+
+    private LevelManager _levelManager;
+    private Grid _grid;
     
     private static GameController _instance;
 
@@ -30,5 +37,12 @@ public class GameController : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    private void Start()
+    {
+        _grid = new Grid(width, height);
+        ServiceLocator.Register(_grid);
+        _levelManager = new LevelManager(puzzleParent);
     }
 }
