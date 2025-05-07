@@ -1,18 +1,43 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Helpers;
+using Interfaces;
+using Pool;
 using UnityEngine;
+using Grid = GridSystem.Grid;
 
 public class Bootstrapper : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
-        
+        StartCoroutine(InitializeDependencies());
     }
 
-    // Update is called once per frame
-    void Update()
+    private IEnumerator InitializeDependencies()
     {
+        var configManager = FindObjectOfType<ChipConfigManager>();
+        while (!configManager.IsReady) 
+        {
+            yield return null;
+        }
+
+        Debug.Log("Bootstrapper: Registering dependencies...");
+
+        var grid = new Grid(GameController.Instance.GridWidth, GameController.Instance.GridHeight);
+        ServiceLocator.Register(grid);
+
+        var poolController = FindObjectOfType<PoolController>();
         
+
+        ServiceLocator.Register(poolController);
+        
+        foreach (var injectable in FindObjectsOfType<MonoBehaviour>().OfType<IInjectable>())
+        {
+            injectable.InjectDependencies();
+        }
+
+        Debug.Log("Bootstrapper: Dependencies injected, loading level...");
+        GameController.Instance.LoadLevel();
     }
 }

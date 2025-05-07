@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Helpers;
+using Pool;
 using UnityEngine;
 using Grid = GridSystem.Grid;
 
@@ -9,6 +10,7 @@ public class GameController : MonoBehaviour
 {
     [SerializeField] private Transform puzzleParent;
     [SerializeField] private CameraController cameraController;
+    [SerializeField] private PoolController poolController;
     [SerializeField] private int width, height;
 
     private LevelManager _levelManager;
@@ -40,10 +42,10 @@ public class GameController : MonoBehaviour
         }
     }
 
-    private void Start()
+    public void LoadLevel()
     {
-        _grid = new Grid(width, height);
-        ServiceLocator.Register(_grid);
+        _grid = ServiceLocator.Get<Grid>();
+        poolController.Initialize();
         cameraController.SetGridSize(width, height);
         _levelManager = new LevelManager(puzzleParent);
     }
