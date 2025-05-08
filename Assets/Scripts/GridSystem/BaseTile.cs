@@ -39,12 +39,13 @@ namespace GridSystem
     
         public void OnTap()
         {
+            tileView.Animate(true);
             Debug.Log("tapped");
         }
 
-        public void OnPointerLeave()
+        public void OnRelease()
         {
-            throw new System.NotImplementedException();
+            tileView.Animate(false);
         }
 
         public void UpdatePosition(Vector2Int position)

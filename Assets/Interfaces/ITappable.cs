@@ -5,6 +5,6 @@ namespace Interfaces
     public interface ITappable
     {
         public void OnTap();
-        public void OnPointerLeave();
+        public void OnRelease();
     }
 }

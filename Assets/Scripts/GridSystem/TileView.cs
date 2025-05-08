@@ -24,6 +24,13 @@ namespace GridSystem
             visuals.SetActive(toggle);
         }
 
+        public void Animate(bool toggle)
+        {
+            var targetScale = toggle ? 1.08f : 1f;
+            var scaleVector = new Vector3(targetScale, targetScale, targetScale);
+            transform.DOScale(scaleVector, 0.15f).SetEase(Ease.OutBack);
+        }
+
         public void MoveTowardsTarget(Transform target, Action onComplete)
         {
             transform.DOMove(target.position, 0.15f).SetEase(Ease.OutBack).OnComplete(() =>

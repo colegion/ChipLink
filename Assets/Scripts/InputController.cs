@@ -11,7 +11,7 @@ public class InputController : MonoBehaviour
     
     private InputMap _inputMap;
 
-    private ITappable _tapped;
+    private ITappable _currentTapped;
     private bool _canDrag;
     private void Start()
     {
@@ -34,20 +34,21 @@ public class InputController : MonoBehaviour
         if (tappable != null)
         {
             _canDrag = true;
-            _tapped = tappable;
-            GameController.Instance.TryAppendToCurrentLink(_tapped);
-            _tapped.OnTap();
+            _currentTapped = tappable;
+            GameController.Instance.TryAppendToCurrentLink(_currentTapped);
+            _currentTapped.OnTap();
         }
     }
     
     private void HandleOnDrag(InputAction.CallbackContext obj)
     {
         if (!_canDrag) return;
-        Debug.Log("draggable");
         var tappable = TryGetTappable();
         if (tappable != null)
         {
-            Debug.Log("found chip " , (tappable as MonoBehaviour)?.gameObject);
+            _currentTapped.OnRelease();
+            _currentTapped = tappable;
+            _currentTapped.OnTap();
             GameController.Instance.TryAppendToCurrentLink(tappable);
         }
     }
