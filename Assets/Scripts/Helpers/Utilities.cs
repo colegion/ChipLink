@@ -67,4 +67,16 @@ namespace Helpers
         };
     }
 
+    [Serializable]
+    public class ColumnFallConfig
+    {
+        public int columnIndex;
+        public int moveCount;
+
+        public ColumnFallConfig(int columnIndex, int moveCount)
+        {
+            this.columnIndex = columnIndex;
+            this.moveCount = moveCount;
+        }
+    }
 }

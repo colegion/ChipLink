@@ -56,7 +56,7 @@ public class InputController : MonoBehaviour
     private void HandleOnRelease(InputAction.CallbackContext obj)
     {
         _canDrag = false;
-        GameController.Instance.HandleOnLinkRequested();
+        GameController.Instance.HandleOnRelease();
     }
 
     private ITappable TryGetTappable()

@@ -24,11 +24,23 @@ namespace GridSystem
             visuals.SetActive(toggle);
         }
 
-        public void Animate(bool toggle)
+        public void AnimateOnHighlight(bool toggle)
         {
             var targetScale = toggle ? 1.08f : 1f;
             var scaleVector = new Vector3(targetScale, targetScale, targetScale);
             transform.DOScale(scaleVector, 0.15f).SetEase(Ease.OutBack);
+        }
+
+        public void Disappear(Action onComplete)
+        {
+            transform.DOPunchScale(new Vector3(1.08f, 1.08f, 1.08f), .12f).OnComplete(() =>
+            {
+                transform.DOScale(Vector3.zero, 0.12f).SetEase(Ease.OutBack).OnComplete(() =>
+                {
+                    onComplete?.Invoke();
+                    transform.localScale = Vector3.one;
+                });
+            });
         }
 
         public void MoveTowardsTarget(Transform target, Action onComplete)

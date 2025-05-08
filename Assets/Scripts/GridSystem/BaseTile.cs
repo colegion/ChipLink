@@ -39,13 +39,20 @@ namespace GridSystem
     
         public void OnTap()
         {
-            tileView.Animate(true);
-            Debug.Log("tapped");
+            tileView.AnimateOnHighlight(true);
         }
 
         public void OnRelease()
         {
-            tileView.Animate(false);
+            tileView.AnimateOnHighlight(false);
+        }
+
+        public void OnLinked()
+        {
+            tileView.Disappear(() =>
+            {
+                GameController.Instance.ReturnPooledObject(this);
+            });
         }
 
         public void UpdatePosition(Vector2Int position)

@@ -33,7 +33,7 @@ public partial class @InputMap: IInputActionCollection2, IDisposable
                     ""id"": ""2fa4454b-4bcf-4e67-ab41-4129bf3f3e04"",
                     ""expectedControlType"": """",
                     ""processors"": """",
-                    ""interactions"": ""Hold(duration=0.15)"",
+                    ""interactions"": ""Hold(duration=0.05)"",
                     ""initialStateCheck"": false
                 },
                 {

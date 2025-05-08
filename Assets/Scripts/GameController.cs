@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using GridSystem;
 using Helpers;
 using Interfaces;
@@ -18,7 +19,8 @@ public class GameController : MonoBehaviour
     private LevelManager _levelManager;
     private Grid _grid;
     
-    private List<ITappable> _currentLink = new List<ITappable>(); 
+    private List<ITappable> _currentLink = new List<ITappable>();
+    private Dictionary<int, ColumnFallConfig> _columnFallConfigs = new Dictionary<int, ColumnFallConfig>();
     
     private static GameController _instance;
 
@@ -54,6 +56,11 @@ public class GameController : MonoBehaviour
         _levelManager = new LevelManager(puzzleParent);
     }
 
+    public void ReturnPooledObject(IPoolable poolObject)
+    {
+        poolController.ReturnPooledObject(poolObject);
+    }
+
     public void TryAppendToCurrentLink(ITappable tappable)
     {
         if (LinkRules.CanLink(_currentLink, tappable))
@@ -62,11 +69,37 @@ public class GameController : MonoBehaviour
         }
     }
 
-    public void HandleOnLinkRequested()
+    public void HandleOnRelease()
     {
-        foreach (var chip in _currentLink)
+        FillFallConfig();
+        StartCoroutine(ProcessLink());
+    }
+
+    private void FillFallConfig()
+    {
+        foreach (BaseTile tile in _currentLink.OfType<BaseTile>())
         {
-            Debug.Log("this is a chip " , (chip as MonoBehaviour)?.gameObject);
+            if (_columnFallConfigs.TryGetValue(tile.X, out var config))
+            {
+                config.moveCount++;
+            }
+            else
+            {
+                _columnFallConfigs[tile.X] = new ColumnFallConfig(tile.X, 1);
+            }
         }
+    }
+
+    private IEnumerator ProcessLink()
+    {
+        foreach (BaseTile tile in _currentLink.OfType<BaseTile>())
+        {
+            tile.OnLinked();
+            yield return new WaitForSeconds(0.07f);
+        }
+
+        _currentLink.Clear();
+        _columnFallConfigs.Clear();
+        yield return null;
     }
 }
