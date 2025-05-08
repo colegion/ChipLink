@@ -1,5 +1,65 @@
 {
     "name": "InputMap",
-    "maps": [],
+    "maps": [
+        {
+            "name": "Inputs",
+            "id": "4bdba7ac-2a52-495e-bbff-05cc08258205",
+            "actions": [
+                {
+                    "name": "HoldToDrag",
+                    "type": "Button",
+                    "id": "2fa4454b-4bcf-4e67-ab41-4129bf3f3e04",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "Hold(duration=0.15)",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Drag",
+                    "type": "Value",
+                    "id": "1c70bf5f-9317-41e4-b808-f7afc6da2ad7",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "66c8bba0-615a-4ee4-894d-8a5e8dc8cd3d",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "HoldToDrag",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4af79e4f-db29-4ef7-82aa-158cdf934e2e",
+                    "path": "<Touchscreen>/primaryTouch/tap",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "HoldToDrag",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "17d94f9e-39ab-440a-8ad4-ead163ed31fd",
+                    "path": "<Pointer>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Drag",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
     "controlSchemes": []
 }

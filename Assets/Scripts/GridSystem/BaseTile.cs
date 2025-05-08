@@ -13,10 +13,12 @@ namespace GridSystem
         protected int _x;
         protected int _y;
         protected int _layer;
+        protected ChipType _chipType;
     
         public int X => _x;
         public int Y => _y;
         public int Layer => _layer;
+        public ChipType ChipType => _chipType;
 
         protected Grid Grid;
         
@@ -27,6 +29,7 @@ namespace GridSystem
             _x = x;
             _y = y;
             _position = new Vector2Int(x, y);
+            _chipType = config.chipType;
             tileView.SetSprite(config.chipSprite);
             SetTransform();
 
@@ -36,7 +39,12 @@ namespace GridSystem
     
         public void OnTap()
         {
-            
+            Debug.Log("tapped");
+        }
+
+        public void OnPointerLeave()
+        {
+            throw new System.NotImplementedException();
         }
 
         public void UpdatePosition(Vector2Int position)

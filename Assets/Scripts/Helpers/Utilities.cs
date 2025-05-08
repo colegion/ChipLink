@@ -39,4 +39,32 @@ namespace Helpers
         public int xCoord, yCoord;
         public ChipType chipType;
     }
+    
+    public enum Direction
+    {
+        Up,
+        Down,
+        Left,
+        Right,
+        UpLeft,
+        UpRight,
+        DownLeft,
+        DownRight
+    }
+
+    public static class DirectionUtils
+    {
+        public static readonly Dictionary<Direction, Vector2Int> Directions = new()
+        {
+            { Direction.Up, new Vector2Int(0, 1) },
+            { Direction.Down, new Vector2Int(0, -1) },
+            { Direction.Left, new Vector2Int(-1, 0) },
+            { Direction.Right, new Vector2Int(1, 0) },
+            { Direction.UpLeft, new Vector2Int(-1, 1) },
+            { Direction.UpRight, new Vector2Int(1, 1) },
+            { Direction.DownLeft, new Vector2Int(-1, -1) },
+            { Direction.DownRight, new Vector2Int(1, -1) }
+        };
+    }
+
 }

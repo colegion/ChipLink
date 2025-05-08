@@ -22,13 +22,78 @@ public partial class @InputMap: IInputActionCollection2, IDisposable
     {
         asset = InputActionAsset.FromJson(@"{
     ""name"": ""InputMap"",
-    ""maps"": [],
+    ""maps"": [
+        {
+            ""name"": ""Inputs"",
+            ""id"": ""4bdba7ac-2a52-495e-bbff-05cc08258205"",
+            ""actions"": [
+                {
+                    ""name"": ""HoldToDrag"",
+                    ""type"": ""Button"",
+                    ""id"": ""2fa4454b-4bcf-4e67-ab41-4129bf3f3e04"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": ""Hold(duration=0.15)"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Drag"",
+                    ""type"": ""Value"",
+                    ""id"": ""1c70bf5f-9317-41e4-b808-f7afc6da2ad7"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""66c8bba0-615a-4ee4-894d-8a5e8dc8cd3d"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HoldToDrag"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4af79e4f-db29-4ef7-82aa-158cdf934e2e"",
+                    ""path"": ""<Touchscreen>/primaryTouch/tap"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HoldToDrag"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""17d94f9e-39ab-440a-8ad4-ead163ed31fd"",
+                    ""path"": ""<Pointer>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Drag"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        }
+    ],
     ""controlSchemes"": []
 }");
+        // Inputs
+        m_Inputs = asset.FindActionMap("Inputs", throwIfNotFound: true);
+        m_Inputs_HoldToDrag = m_Inputs.FindAction("HoldToDrag", throwIfNotFound: true);
+        m_Inputs_Drag = m_Inputs.FindAction("Drag", throwIfNotFound: true);
     }
 
     ~@InputMap()
     {
+        UnityEngine.Debug.Assert(!m_Inputs.enabled, "This will cause a leak and performance issues, InputMap.Inputs.Disable() has not been called.");
     }
 
     public void Dispose()
@@ -85,5 +150,64 @@ public partial class @InputMap: IInputActionCollection2, IDisposable
     public int FindBinding(InputBinding bindingMask, out InputAction action)
     {
         return asset.FindBinding(bindingMask, out action);
+    }
+
+    // Inputs
+    private readonly InputActionMap m_Inputs;
+    private List<IInputsActions> m_InputsActionsCallbackInterfaces = new List<IInputsActions>();
+    private readonly InputAction m_Inputs_HoldToDrag;
+    private readonly InputAction m_Inputs_Drag;
+    public struct InputsActions
+    {
+        private @InputMap m_Wrapper;
+        public InputsActions(@InputMap wrapper) { m_Wrapper = wrapper; }
+        public InputAction @HoldToDrag => m_Wrapper.m_Inputs_HoldToDrag;
+        public InputAction @Drag => m_Wrapper.m_Inputs_Drag;
+        public InputActionMap Get() { return m_Wrapper.m_Inputs; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(InputsActions set) { return set.Get(); }
+        public void AddCallbacks(IInputsActions instance)
+        {
+            if (instance == null || m_Wrapper.m_InputsActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_InputsActionsCallbackInterfaces.Add(instance);
+            @HoldToDrag.started += instance.OnHoldToDrag;
+            @HoldToDrag.performed += instance.OnHoldToDrag;
+            @HoldToDrag.canceled += instance.OnHoldToDrag;
+            @Drag.started += instance.OnDrag;
+            @Drag.performed += instance.OnDrag;
+            @Drag.canceled += instance.OnDrag;
+        }
+
+        private void UnregisterCallbacks(IInputsActions instance)
+        {
+            @HoldToDrag.started -= instance.OnHoldToDrag;
+            @HoldToDrag.performed -= instance.OnHoldToDrag;
+            @HoldToDrag.canceled -= instance.OnHoldToDrag;
+            @Drag.started -= instance.OnDrag;
+            @Drag.performed -= instance.OnDrag;
+            @Drag.canceled -= instance.OnDrag;
+        }
+
+        public void RemoveCallbacks(IInputsActions instance)
+        {
+            if (m_Wrapper.m_InputsActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IInputsActions instance)
+        {
+            foreach (var item in m_Wrapper.m_InputsActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_InputsActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public InputsActions @Inputs => new InputsActions(this);
+    public interface IInputsActions
+    {
+        void OnHoldToDrag(InputAction.CallbackContext context);
+        void OnDrag(InputAction.CallbackContext context);
     }
 }
