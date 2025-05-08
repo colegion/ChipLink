@@ -12,7 +12,7 @@ namespace GridSystem
     
         protected int _x;
         protected int _y;
-        protected int _layer;
+        protected int _layer = Utilities.DefaultChipLayer;
         protected ChipType _chipType;
     
         public int X => _x;
@@ -58,7 +58,9 @@ namespace GridSystem
         public void UpdatePosition(Vector2Int position)
         {
             SetPosition(position);
-            tileView.MoveTowardsTarget(Grid.GetCell(_x, _y).GetTarget(), SetTransform);
+            tileView.MoveTowardsTarget(Grid.GetCell(_x, _y).GetTarget(), ()=>
+            {
+            });
         }
 
         public void SetLayer(int layer)
@@ -85,6 +87,7 @@ namespace GridSystem
 
         private void SetPosition(Vector2Int position)
         {
+            Grid.ClearTileOfParentCell(this);
             _position = position;
             _x = _position.x;
             _y = _position.y;

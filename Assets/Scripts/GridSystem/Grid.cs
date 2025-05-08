@@ -30,7 +30,6 @@ namespace GridSystem
             if (!IsCoordinateValid(x, y)) return null;
             return _board[x, y];
         }
-        
 
         public void SetCell(BaseCell cell)
         {
@@ -71,13 +70,35 @@ namespace GridSystem
                 _tilesOnBoard.Remove(tile);
             }
         }
+        
+        public List<BaseCell> GetColumn(int columnIndex)
+        {
+            var column = new List<BaseCell>();
+
+            if (columnIndex < 0 || columnIndex >= Width)
+            {
+                Debug.LogWarning($"Column index {columnIndex} is out of bounds.");
+                return column;
+            }
+
+            for (int y = 0; y < Height; y++)
+            {
+                var cell = _board[columnIndex, y];
+                if (cell != null)
+                {
+                    column.Add(cell);
+                }
+            }
+
+            return column;
+        }
+
 
         public List<BaseTile> GetAllTilesOnBoard()
         {
             return _tilesOnBoard;
         }
-    
-
+        
         public Transform GetCellTargetByCoordinate(int x, int y)
         {
             return _board[x, y].GetTarget();

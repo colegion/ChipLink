@@ -18,23 +18,20 @@ public class GameController : MonoBehaviour
 
     private LevelManager _levelManager;
     private Grid _grid;
-    
+
     private List<ITappable> _currentLink = new List<ITappable>();
-    private Dictionary<int, ColumnFallConfig> _columnFallConfigs = new Dictionary<int, ColumnFallConfig>();
-    
+    private Dictionary<int, HashSet<int>> _columnEmptyRows = new();
+
     private static GameController _instance;
 
     public static GameController Instance
     {
-        get
-        {
-            return _instance;
-        }
+        get { return _instance; }
     }
-    
+
     public int GridWidth => width;
     public int GridHeight => height;
-    
+
     private void Awake()
     {
         if (_instance == null)
@@ -77,16 +74,17 @@ public class GameController : MonoBehaviour
 
     private void FillFallConfig()
     {
+        _columnEmptyRows.Clear();
+
         foreach (BaseTile tile in _currentLink.OfType<BaseTile>())
         {
-            if (_columnFallConfigs.TryGetValue(tile.X, out var config))
+            if (!_columnEmptyRows.TryGetValue(tile.X, out var emptyRows))
             {
-                config.moveCount++;
+                emptyRows = new HashSet<int>();
+                _columnEmptyRows[tile.X] = emptyRows;
             }
-            else
-            {
-                _columnFallConfigs[tile.X] = new ColumnFallConfig(tile.X, 1);
-            }
+
+            emptyRows.Add(tile.Y);
         }
     }
 
@@ -98,8 +96,39 @@ public class GameController : MonoBehaviour
             yield return new WaitForSeconds(0.07f);
         }
 
+        StartCoroutine(FillEmptyCells());
         _currentLink.Clear();
-        _columnFallConfigs.Clear();
         yield return null;
+    }
+
+    private IEnumerator FillEmptyCells()
+    {
+        foreach (var kvp in _columnEmptyRows)
+        {
+            int column = kvp.Key;
+            var emptyYSet = kvp.Value;
+
+            int emptyBelow = 0;
+
+            for (int y = 0; y < _grid.Height; y++)
+            {
+                if (emptyYSet.Contains(y))
+                {
+                    emptyBelow++;
+                }
+                else
+                {
+                    BaseTile tile = _grid.GetCell(column, y)?.GetTile(Utilities.DefaultChipLayer);
+                    if (tile != null && emptyBelow > 0)
+                    {
+                        tile.UpdatePosition(new Vector2Int(column, y - emptyBelow));
+                    }
+                }
+            }
+
+            yield return new WaitForSeconds(0.03f);
+        }
+
+        _columnEmptyRows.Clear();
     }
 }

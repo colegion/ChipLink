@@ -33,7 +33,7 @@ namespace GridSystem
 
         public void Disappear(Action onComplete)
         {
-            transform.DOPunchScale(new Vector3(1.08f, 1.08f, 1.08f), .12f).OnComplete(() =>
+            transform.DOPunchScale(new Vector3(1.02f, 1.02f, 1.02f), .12f).OnComplete(() =>
             {
                 transform.DOScale(Vector3.zero, 0.12f).SetEase(Ease.OutBack).OnComplete(() =>
                 {

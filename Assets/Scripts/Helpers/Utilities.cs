@@ -7,6 +7,7 @@ namespace Helpers
 {
     public class Utilities : MonoBehaviour
     {
+        public static int DefaultChipLayer = 1;
     }
     
     public enum PoolableTypes
