@@ -29,9 +29,6 @@ namespace Helpers
     {
         public int width;
         public int height;
-        public int remainingMoves;
-        public int currentScore;
-        public int targetScore;
         public List<TileData> tiles;
     }
 

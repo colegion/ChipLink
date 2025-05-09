@@ -6,15 +6,16 @@ using GridSystem;
 using Helpers;
 using Interfaces;
 using Pool;
+using ScriptableObjects;
 using UnityEngine;
 using Grid = GridSystem.Grid;
 
 public class GameController : MonoBehaviour
 {
+    [SerializeField] private LevelConfig levelConfig;
     [SerializeField] private Transform puzzleParent;
     [SerializeField] private CameraController cameraController;
     [SerializeField] private PoolController poolController;
-    [SerializeField] private int width, height;
 
     private LevelManager _levelManager;
     private ChipConfigManager _chipConfigManager;
@@ -30,8 +31,8 @@ public class GameController : MonoBehaviour
         get { return _instance; }
     }
 
-    public int GridWidth => width;
-    public int GridHeight => height;
+    public int GridWidth => levelConfig.boardWidth;
+    public int GridHeight => levelConfig.boardHeight;
 
     private void Awake()
     {
@@ -50,7 +51,7 @@ public class GameController : MonoBehaviour
     {
         _grid = ServiceLocator.Get<Grid>();
         poolController.Initialize();
-        cameraController.SetGridSize(width, height);
+        cameraController.SetGridSize(GridWidth, GridHeight);
         _levelManager = new LevelManager(puzzleParent);
         _chipConfigManager = ServiceLocator.Get<ChipConfigManager>();
     }

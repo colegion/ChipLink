@@ -680,6 +680,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5330403772977953965, guid: 19e434b9cc0906145b7bd46e29f90e28,
         type: 3}
+      propertyPath: levelConfig
+      value: 
+      objectReference: {fileID: 11400000, guid: 431ffbd00eff43041bb0bfb3844ebdab,
+        type: 2}
+    - target: {fileID: 5330403772977953965, guid: 19e434b9cc0906145b7bd46e29f90e28,
+        type: 3}
       propertyPath: puzzleParent
       value: 
       objectReference: {fileID: 304723200}
