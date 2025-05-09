@@ -5,23 +5,37 @@ using UnityEngine;
 
 public static class LinkRules
 {
-    public static bool CanLink(List<ITappable> currentLink, ITappable newTappable)
+    public static bool CanLink(List<ITappable> currentLink, ITappable newTappable, out bool isBacktracking)
     {
+        isBacktracking = false;
+
         if (currentLink.Count == 0)
             return true;
 
-        if (currentLink.Contains(newTappable))
-            return false;
-        
         if (currentLink[^1] is not BaseTile lastTile || newTappable is not BaseTile newTile)
             return false;
-        
+
+        Vector2Int delta = newTile.GetPosition() - lastTile.GetPosition();
+        if (!IsAdjacent(delta))
+            return false;
+
+        // BACKTRACKING: if user drags back to the second-last tile
+        if (currentLink.Count >= 2 && Equals(newTappable, currentLink[^2]))
+        {
+            isBacktracking = true;
+            return true;
+        }
+
+        // Forward linking
+        if (currentLink.Contains(newTappable))
+            return false;
+
         if (!HasSameChipType(lastTile, newTile))
             return false;
-        
-        Vector2Int delta = newTile.GetPosition() - lastTile.GetPosition();
-        return IsAdjacent(delta);
+
+        return true;
     }
+
 
     private static bool HasSameChipType(BaseTile a, BaseTile b)
     {

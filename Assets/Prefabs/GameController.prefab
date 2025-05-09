@@ -44,6 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 446ec7fc3df7c9641a234bf30bb1a307, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  puzzleParent: {fileID: 0}
-  width: 8
-  height: 8
+  levelConfig: {fileID: 11400000, guid: 431ffbd00eff43041bb0bfb3844ebdab, type: 2}
+  puzzleParent: {fileID: 1271657307471945362}
+  cameraController: {fileID: 0}
+  poolController: {fileID: 0}
+  inputController: {fileID: 0}

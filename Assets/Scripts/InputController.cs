@@ -15,9 +15,21 @@ public class InputController : MonoBehaviour
     private bool _canDrag;
     private void Start()
     {
-        _inputMap = new InputMap();
-        _inputMap.Inputs.Enable();
+        _inputMap = new InputMap(); ;
         RegisterInputActions();
+    }
+
+    public void ToggleInput(bool toggle)
+    {
+        if (toggle)
+        {
+            _inputMap.Inputs.Enable();
+        }
+        else
+        {
+            _inputMap.Inputs.Disable();
+        }
+        
     }
 
     private void RegisterInputActions()

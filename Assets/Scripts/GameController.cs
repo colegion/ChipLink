@@ -17,6 +17,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private Transform puzzleParent;
     [SerializeField] private CameraController cameraController;
     [SerializeField] private PoolController poolController;
+    [SerializeField] private InputController inputController;
 
     private LevelManager _levelManager;
     private ChipConfigManager _chipConfigManager;
@@ -61,6 +62,7 @@ public class GameController : MonoBehaviour
         _levelManager = new LevelManager(puzzleParent);
         _chipConfigManager = ServiceLocator.Get<ChipConfigManager>();
         _tracker = new LevelProgressTracker(levelConfig);
+        inputController.ToggleInput(true);
         OnLevelLoaded?.Invoke(levelConfig);
     }
 
@@ -69,16 +71,27 @@ public class GameController : MonoBehaviour
         poolController.ReturnPooledObject(poolObject);
     }
 
+    private List<ITappable> _adjacentTiles;
+    
     public void TryAppendToCurrentLink(ITappable tappable)
     {
-        if (LinkRules.CanLink(_currentLink, tappable))
+        if (LinkRules.CanLink(_currentLink, tappable, out bool isBacktracking))
         {
-            _currentLink.Add(tappable);
+            if (isBacktracking)
+            {
+                _currentLink.RemoveAt(_currentLink.Count - 1);
+            }
+            else
+            {
+                _currentLink.Add(tappable);
+            }
         }
     }
 
+
     public void HandleOnRelease()
     {
+        if(_currentLink.Count == 0) return;
         if (_currentLink.Count < Utilities.LinkThreshold)
         {
             _currentLink[^1].OnRelease();
@@ -218,6 +231,7 @@ public class GameController : MonoBehaviour
 
     public void OnLevelFinished(bool isSuccess)
     {
+        inputController.ToggleInput(false);
         OnGameOver?.Invoke(isSuccess);
     }
 

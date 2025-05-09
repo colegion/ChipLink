@@ -31,6 +31,8 @@ namespace UI
         public void HandleOnMove(LevelTargetConfig moveConfig)
         {
             _config.count -= moveConfig.count;
+            if(_config.count < 0)
+                _config.count = 0;
             targetField.text = $"{_config.count}";
         }
 

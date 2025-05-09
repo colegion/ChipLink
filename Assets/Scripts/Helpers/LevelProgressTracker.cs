@@ -3,42 +3,51 @@ using System.Collections.Generic;
 using System.Linq;
 using ScriptableObjects.Level;
 
-public class LevelProgressTracker
+namespace Helpers
 {
-    private List<LevelTargetConfig> _targets;
-    private int _remainingMoves;
-
-    public LevelProgressTracker(LevelConfig config)
+    public class LevelProgressTracker
     {
-        _targets = LevelConfig.MergeDuplicateTargets(config.levelTargets);
-        _remainingMoves = config.moveLimit;
-    }
+        private List<LevelTargetConfig> _targets;
+        private int _remainingMoves;
 
-    public void RegisterMove(LevelTargetConfig move)
-    {
-        _remainingMoves--;
-
-        var target = _targets.FirstOrDefault(t => t.targetType == move.targetType);
-        if (target != null)
+        public LevelProgressTracker(LevelConfig config)
         {
-            target.count = Math.Max(0, target.count - move.count);
+            _targets = LevelConfig.MergeDuplicateTargets(config.levelTargets)
+                .Select(t => new LevelTargetConfig
+                {
+                    targetType = t.targetType,
+                    count = t.count
+                }).ToList();
+
+            _remainingMoves = config.moveLimit;
         }
 
-        if (CheckIfLevelCompleted())
+        public void RegisterMove(LevelTargetConfig move)
         {
-            GameController.Instance.OnLevelFinished(true);
+            _remainingMoves--;
+
+            var target = _targets.FirstOrDefault(t => t.targetType == move.targetType);
+            if (target != null)
+            {
+                target.count = Math.Max(0, target.count - move.count);
+            }
+
+            if (CheckIfLevelCompleted())
+            {
+                GameController.Instance.OnLevelFinished(true);
+            }
+            else if (_remainingMoves <= 0)
+            {
+                GameController.Instance.OnLevelFinished(false);
+            }
         }
-        else if (_remainingMoves <= 0)
+
+        private bool CheckIfLevelCompleted()
         {
-            GameController.Instance.OnLevelFinished(false);
+            return _targets.All(t => t.count <= 0);
         }
-    }
 
-    private bool CheckIfLevelCompleted()
-    {
-        return _targets.All(t => t.count <= 0);
+        public int GetRemainingMoves() => _remainingMoves;
+        public List<LevelTargetConfig> GetRemainingTargets() => _targets;
     }
-
-    public int GetRemainingMoves() => _remainingMoves;
-    public List<LevelTargetConfig> GetRemainingTargets() => _targets;
 }
