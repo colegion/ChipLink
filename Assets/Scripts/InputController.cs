@@ -29,7 +29,6 @@ public class InputController : MonoBehaviour
 
     private void HandleOnHold(InputAction.CallbackContext obj)
     {
-        Debug.Log("hold");
         var tappable = TryGetTappable();
         if (tappable != null)
         {

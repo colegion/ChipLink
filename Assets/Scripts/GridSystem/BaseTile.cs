@@ -31,7 +31,6 @@ namespace GridSystem
             _position = new Vector2Int(x, y);
             _chipType = config.chipType;
             tileView.SetSprite(config.chipSprite);
-            SetTransform();
 
             if(Grid == null) Grid = ServiceLocator.Get<Grid>();
             Grid.PlaceTileToParentCell(this);
@@ -58,9 +57,7 @@ namespace GridSystem
         public void UpdatePosition(Vector2Int position)
         {
             SetPosition(position);
-            tileView.MoveTowardsTarget(Grid.GetCell(_x, _y).GetTarget(), ()=>
-            {
-            });
+            tileView.MoveTowardsTarget(Grid.GetCell(_x, _y).GetTarget(), SetTransform);
         }
 
         public void SetLayer(int layer)
@@ -77,6 +74,7 @@ namespace GridSystem
             {
                 cell.SetTile(this);
                 transform.position = cell.GetWorldPosition();
+                Grid.PlaceTileToParentCell(this);
             }
             else
             {

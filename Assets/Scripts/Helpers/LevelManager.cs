@@ -123,8 +123,10 @@ namespace Helpers
             foreach (var data in levelData.tiles)
             {
                 var tile = tileFactory.SpawnTileByConfig();
+                tile.transform.SetParent(GameController.Instance.GetPuzzleParent());
                 tile.ConfigureSelf(configManager.GetItemConfig(data.chipType), data.xCoord,
                     data.yCoord);
+                tile.SetTransform();
             }
         }
 
@@ -179,7 +181,9 @@ namespace Helpers
                 {
                     var randomConfig = configManager.GetRandomConfig();
                     var tile = tileFactory.SpawnTileByConfig();
+                    tile.transform.SetParent(GameController.Instance.GetPuzzleParent());
                     tile.ConfigureSelf(randomConfig, i, j);
+                    tile.SetTransform();
                 }
             }
         }

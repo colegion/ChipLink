@@ -33,9 +33,9 @@ namespace GridSystem
 
         public void Disappear(Action onComplete)
         {
-            transform.DOPunchScale(new Vector3(1.02f, 1.02f, 1.02f), .12f).OnComplete(() =>
+            transform.DOPunchScale(new Vector3(1.01f, 1.01f, 1.01f), .12f).OnComplete(() =>
             {
-                transform.DOScale(Vector3.zero, 0.12f).SetEase(Ease.OutBack).OnComplete(() =>
+                transform.DOScale(Vector3.zero, 0.12f).SetEase(Ease.InBounce).OnComplete(() =>
                 {
                     onComplete?.Invoke();
                     transform.localScale = Vector3.one;
@@ -45,7 +45,7 @@ namespace GridSystem
 
         public void MoveTowardsTarget(Transform target, Action onComplete)
         {
-            transform.DOMove(target.position, 0.15f).SetEase(Ease.OutBack).OnComplete(() =>
+            transform.DOMove(target.position, 0.15f).SetEase(Ease.InBounce).OnComplete(() =>
             {
                 onComplete?.Invoke();
             });

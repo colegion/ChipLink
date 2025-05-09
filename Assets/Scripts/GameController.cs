@@ -17,6 +17,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private int width, height;
 
     private LevelManager _levelManager;
+    private ChipConfigManager _chipConfigManager;
     private Grid _grid;
 
     private List<ITappable> _currentLink = new List<ITappable>();
@@ -51,6 +52,7 @@ public class GameController : MonoBehaviour
         poolController.Initialize();
         cameraController.SetGridSize(width, height);
         _levelManager = new LevelManager(puzzleParent);
+        _chipConfigManager = ServiceLocator.Get<ChipConfigManager>();
     }
 
     public void ReturnPooledObject(IPoolable poolObject)
@@ -68,6 +70,8 @@ public class GameController : MonoBehaviour
 
     public void HandleOnRelease()
     {
+        if (_currentLink.Count < Utilities.LinkThreshold) return;
+        
         FillFallConfig();
         StartCoroutine(ProcessLink());
     }
@@ -96,12 +100,12 @@ public class GameController : MonoBehaviour
             yield return new WaitForSeconds(0.07f);
         }
 
-        StartCoroutine(FillEmptyCells());
+        StartCoroutine(DropAppropriateTiles());
         _currentLink.Clear();
         yield return null;
     }
 
-    private IEnumerator FillEmptyCells()
+    private IEnumerator DropAppropriateTiles()
     {
         foreach (var kvp in _columnEmptyRows)
         {
@@ -126,9 +130,48 @@ public class GameController : MonoBehaviour
                 }
             }
 
-            yield return new WaitForSeconds(0.03f);
+            yield return new WaitForSeconds(0.09f);
         }
 
+        yield return new WaitForSeconds(0.2f);
+        
+        StartCoroutine(SpawnNewTiles());
+    }
+    
+    private IEnumerator SpawnNewTiles()
+    {
+        foreach (var kvp in _columnEmptyRows)
+        {
+            int column = kvp.Key;
+            var emptyRows = _grid.GetEmptyRowIndexesInColumn(column);
+            foreach (int emptyRowIndex in emptyRows)
+            {
+                Debug.Log($"Spawning in column {column} - Empty Rows: {string.Join(",", emptyRows)}");
+
+                BaseTile newTile = poolController.GetPooledObject(PoolableTypes.BaseTile) as BaseTile;
+                if (newTile != null)
+                {
+                    int targetZ = emptyRowIndex;
+                    newTile.transform.SetParent(puzzleParent);
+                    newTile.ConfigureSelf(_chipConfigManager.GetRandomConfig(), column, targetZ);
+                    float spawnHeight = _grid.Height + 1f;
+                    Vector3 spawnPos = new Vector3(column, 0, spawnHeight);
+                    newTile.transform.position = spawnPos;
+                    
+                    newTile.UpdatePosition(new Vector2Int(column, targetZ));
+                }
+                
+                yield return new WaitForSeconds(0.1f);
+            }
+            
+            yield return new WaitForSeconds(0.1f);
+        }
+        
         _columnEmptyRows.Clear();
+    }
+    
+    public Transform GetPuzzleParent()
+    {
+        return puzzleParent;
     }
 }

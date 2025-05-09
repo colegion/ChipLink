@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Helpers;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -71,28 +72,22 @@ namespace GridSystem
             }
         }
         
-        public List<BaseCell> GetColumn(int columnIndex)
+        public List<int> GetEmptyRowIndexesInColumn(int column)
         {
-            var column = new List<BaseCell>();
-
-            if (columnIndex < 0 || columnIndex >= Width)
+            List<int> emptyRows = new List<int>();
+            
+            for (int row = 0; row < Height; row++)
             {
-                Debug.LogWarning($"Column index {columnIndex} is out of bounds.");
-                return column;
-            }
-
-            for (int y = 0; y < Height; y++)
-            {
-                var cell = _board[columnIndex, y];
-                if (cell != null)
+                BaseCell cell = GetCell(column, row);
+                if (cell != null && cell.GetTile(Utilities.DefaultChipLayer) == null)
                 {
-                    column.Add(cell);
+                    emptyRows.Add(row);
                 }
             }
+            Debug.Log($"Empty cells in column {column}: {string.Join(",", emptyRows)}");
 
-            return column;
+            return emptyRows;
         }
-
 
         public List<BaseTile> GetAllTilesOnBoard()
         {
