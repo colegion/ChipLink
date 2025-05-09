@@ -27,7 +27,8 @@ public class GameController : MonoBehaviour
     private readonly List<ITappable> _currentLink = new List<ITappable>();
     private readonly Dictionary<int, HashSet<int>> _columnEmptyRows = new();
     private List<TileData> _levelTiles = new();
-
+    private List<BaseTile> _lastHighlightedTiles = new();
+    
     private static GameController _instance;
 
     public static GameController Instance
@@ -41,6 +42,7 @@ public class GameController : MonoBehaviour
     public static event Action<LevelConfig> OnLevelLoaded;
     public static event Action<LevelTargetConfig> OnSuccessfulMove;
     public static event Action<bool> OnGameOver;
+
     private void Awake()
     {
         if (_instance == null)
@@ -70,8 +72,6 @@ public class GameController : MonoBehaviour
     {
         poolController.ReturnPooledObject(poolObject);
     }
-
-    private List<ITappable> _adjacentTiles;
     
     public void TryAppendToCurrentLink(ITappable tappable)
     {
@@ -86,19 +86,53 @@ public class GameController : MonoBehaviour
                 _currentLink.Add(tappable);
             }
         }
+
+        if(_currentLink.Count > 0)
+            HighlightAdjacentTiles(_currentLink[^1] as BaseTile);
     }
 
+    private void HighlightAdjacentTiles(BaseTile origin)
+    {
+        ClearPreviousHighlights();
+        Vector2Int originPos = origin.GetPosition();
+        ChipType originType = origin.ChipType;
 
+        foreach (var dir in DirectionUtils.Directions.Values)
+        {
+            Vector2Int checkPos = originPos + dir;
+            var cell = _grid.GetCell(checkPos.x, checkPos.y);
+
+            if (cell != null && cell.GetTile(Utilities.DefaultChipLayer) is BaseTile neighbor)
+            {
+                if (neighbor.ChipType == originType)
+                    neighbor.HighlightView(HighlightType.Bright);
+                else
+                    neighbor.HighlightView(HighlightType.Dark);
+
+                _lastHighlightedTiles.Add(neighbor);
+            }
+        }
+    }
+
+    private void ClearPreviousHighlights()
+    {
+        foreach (var tile in _lastHighlightedTiles)
+            tile.HighlightView(HighlightType.None);
+
+        _lastHighlightedTiles.Clear();
+    }
+    
     public void HandleOnRelease()
     {
-        if(_currentLink.Count == 0) return;
+        if (_currentLink.Count == 0) return;
         if (_currentLink.Count < Utilities.LinkThreshold)
         {
             _currentLink[^1].OnRelease();
             _currentLink.Clear();
             return;
         }
-        
+
+        ClearPreviousHighlights();
         FillFallConfig();
         StartCoroutine(ProcessLink());
     }
@@ -134,7 +168,7 @@ public class GameController : MonoBehaviour
         OnSuccessfulMove?.Invoke(config);
 
         yield return new WaitForSeconds(0.2f);
-        
+
         StartCoroutine(DropAppropriateTiles());
         _currentLink.Clear();
         yield return null;
@@ -169,10 +203,10 @@ public class GameController : MonoBehaviour
         }
 
         yield return new WaitForSeconds(0.2f);
-        
+
         StartCoroutine(SpawnNewTiles());
     }
-    
+
     private IEnumerator SpawnNewTiles()
     {
         foreach (var kvp in _columnEmptyRows)
@@ -192,19 +226,19 @@ public class GameController : MonoBehaviour
                     float spawnHeight = _grid.Height + 1f;
                     Vector3 spawnPos = new Vector3(column, 0, spawnHeight);
                     newTile.transform.position = spawnPos;
-                    
+
                     newTile.UpdatePosition(new Vector2Int(column, targetZ));
                 }
-                
+
                 yield return new WaitForSeconds(0.1f);
             }
-            
+
             yield return new WaitForSeconds(0.1f);
         }
-        
+
         _columnEmptyRows.Clear();
     }
-    
+
     public void AppendLevelTiles(TileData data)
     {
         _levelTiles.Add(data);
@@ -219,7 +253,7 @@ public class GameController : MonoBehaviour
     {
         levelConfig.moveLimit = _tracker.GetRemainingMoves();
         levelConfig.levelTargets = _tracker.GetRemainingTargets();
-        
+
         var levelData = new LevelData
         {
             levelConfig = levelConfig,
@@ -239,7 +273,7 @@ public class GameController : MonoBehaviour
     {
         return _chipConfigManager;
     }
-    
+
     public Transform GetPuzzleParent()
     {
         return puzzleParent;

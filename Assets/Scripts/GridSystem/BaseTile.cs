@@ -97,6 +97,11 @@ namespace GridSystem
             GameController.Instance.AppendLevelTiles(_tileData);
         }
 
+        public void HighlightView(HighlightType type)
+        {
+            tileView.HighlightSelf(type);
+        }
+
         private void ConfigureTileData()
         {
             _tileData = new TileData()

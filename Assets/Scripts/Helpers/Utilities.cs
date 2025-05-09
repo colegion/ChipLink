@@ -40,6 +40,13 @@ namespace Helpers
         public int xCoord, yCoord;
         public ChipType chipType;
     }
+
+    public enum HighlightType
+    {
+        None,
+        Dark,
+        Bright
+    }
     
     public enum Direction
     {

@@ -1,5 +1,6 @@
 using System;
 using DG.Tweening;
+using Helpers;
 using UnityEngine;
 
 namespace GridSystem
@@ -41,6 +42,22 @@ namespace GridSystem
                     transform.localScale = Vector3.one;
                 });
             });
+        }
+
+        public void HighlightSelf(HighlightType type)
+        {
+            switch (type)
+            {
+                case HighlightType.None:
+                    tileRenderer.color = Color.white;
+                    break;
+                case HighlightType.Dark:
+                    tileRenderer.color = new Color(0.5f, 0.5f, 0.5f, 0.75f);
+                    break;
+                case HighlightType.Bright:
+                    tileRenderer.color = Color.yellow;
+                    break;
+            }
         }
 
         public void MoveTowardsTarget(Transform target, Action onComplete)
