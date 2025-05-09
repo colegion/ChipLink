@@ -50,6 +50,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   visuals: {fileID: 4617544113380240830}
+  trailTarget: {fileID: 2759032638943115879}
   targetImage: {fileID: 8950987706828127367}
   targetField: {fileID: 6298479801754386817}
 --- !u!1 &4617544113380240830

@@ -17,3 +17,5 @@ MonoBehaviour:
     poolCount: 150
   - poolItemType: 1
     poolCount: 5
+  - poolItemType: 2
+    poolCount: 25

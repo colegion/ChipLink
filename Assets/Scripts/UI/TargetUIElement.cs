@@ -10,6 +10,7 @@ namespace UI
     public class TargetUIElement : MonoBehaviour, IPoolable
     {
         [SerializeField] private GameObject visuals;
+        [SerializeField] private RectTransform trailTarget;
         [SerializeField] private Image targetImage;
         [SerializeField] private TextMeshProUGUI targetField;
         
@@ -17,7 +18,11 @@ namespace UI
 
         public void ConfigureSelf(LevelTargetConfig config)
         {
-            _config = config;
+            _config = new LevelTargetConfig
+            {
+                targetType = config.targetType,
+                count = config.count
+            };
             var configManager = ServiceLocator.Get<ChipConfigManager>();
             targetImage.sprite = configManager.GetItemConfig(_config.targetType).chipSprite;
             targetField.text = $"{_config.count}";
@@ -27,6 +32,11 @@ namespace UI
         {
             _config.count -= moveConfig.count;
             targetField.text = $"{_config.count}";
+        }
+
+        public RectTransform GetTarget()
+        {
+            return trailTarget;
         }
 
         public void OnPooled()

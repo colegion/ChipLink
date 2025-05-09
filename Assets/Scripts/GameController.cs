@@ -105,6 +105,13 @@ public class GameController : MonoBehaviour
             yield return new WaitForSeconds(0.07f);
         }
 
+        var config = new LevelTargetConfig();
+        config.targetType = ((BaseTile)_currentLink[0]).ChipType;
+        config.count = _currentLink.Count;
+        OnSuccessfulMove?.Invoke(config);
+
+        yield return new WaitForSeconds(0.2f);
+        
         StartCoroutine(DropAppropriateTiles());
         _currentLink.Clear();
         yield return null;
@@ -173,6 +180,11 @@ public class GameController : MonoBehaviour
         }
         
         _columnEmptyRows.Clear();
+    }
+
+    public ChipConfigManager GetChipConfigManager()
+    {
+        return _chipConfigManager;
     }
     
     public Transform GetPuzzleParent()

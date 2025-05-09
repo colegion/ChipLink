@@ -39,11 +39,13 @@ namespace UI
         private void AddListeners()
         {
             GameController.OnLevelLoaded += HandleOnLevelLoaded;
+            GameController.OnSuccessfulMove += HandleOnMove;
         }
         
         private void RemoveListeners()
         {
             GameController.OnLevelLoaded -= HandleOnLevelLoaded;
+            GameController.OnSuccessfulMove -= HandleOnMove;
         }
     }
 }

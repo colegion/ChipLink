@@ -15,6 +15,7 @@ namespace Helpers
     {
         BaseTile,
         TargetUIElement,
+        TrailObject
     }
 
     public enum ChipType
