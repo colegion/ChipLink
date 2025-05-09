@@ -112,8 +112,8 @@ namespace Helpers
 
         private void InitializeLevel(LevelData levelData)
         {
-            int width = levelData.width;
-            int height = levelData.height;
+            int width = levelData.levelConfig.boardWidth;
+            int height = levelData.levelConfig.boardHeight;
 
             CreateCells(width, height);
 
@@ -136,6 +136,7 @@ namespace Helpers
             int height = GameController.Instance.GridHeight;
 
             CreateCells(width, height);
+            CreateRandomBoard(width, height);
         }
 
         private void CreateCells(int width, int height)
@@ -166,8 +167,6 @@ namespace Helpers
             }
 
             Debug.Log($"[LevelManager] Created {width}x{height} grid of cells.");
-
-            CreateRandomBoard(width, height);
         }
 
         private void CreateRandomBoard(int width, int height)

@@ -23,6 +23,7 @@ namespace GridSystem
         protected Grid Grid;
         
         protected Vector2Int _position;
+        private TileData _tileData;
     
         public virtual void ConfigureSelf(ChipConfig config, int x, int y)
         {
@@ -31,9 +32,11 @@ namespace GridSystem
             _position = new Vector2Int(x, y);
             _chipType = config.chipType;
             tileView.SetSprite(config.chipSprite);
+            ConfigureTileData();
 
             if(Grid == null) Grid = ServiceLocator.Get<Grid>();
             Grid.PlaceTileToParentCell(this);
+            GameController.Instance.AppendLevelTiles(_tileData);
         }
     
         public void OnTap()
@@ -85,18 +88,33 @@ namespace GridSystem
 
         private void SetPosition(Vector2Int position)
         {
+            GameController.Instance.RemoveDataFromLevelTiles(_tileData);
             Grid.ClearTileOfParentCell(this);
             _position = position;
             _x = _position.x;
             _y = _position.y;
+            ConfigureTileData();
+            GameController.Instance.AppendLevelTiles(_tileData);
+        }
+
+        private void ConfigureTileData()
+        {
+            _tileData = new TileData()
+            {
+                xCoord = _x,
+                yCoord = _y,
+                chipType = _chipType
+            };
         }
 
         protected virtual void ResetSelf()
         {
+            GameController.Instance.RemoveDataFromLevelTiles(_tileData);
             Grid.ClearTileOfParentCell(this);
             tileView.ResetSelf();
             tileView.ToggleVisuals(false);
             _position = Vector2Int.zero;
+            _tileData = null;
         }
 
         public Vector2Int GetPosition()

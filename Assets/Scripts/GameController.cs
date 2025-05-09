@@ -22,8 +22,9 @@ public class GameController : MonoBehaviour
     private ChipConfigManager _chipConfigManager;
     private Grid _grid;
 
-    private List<ITappable> _currentLink = new List<ITappable>();
-    private Dictionary<int, HashSet<int>> _columnEmptyRows = new();
+    private readonly List<ITappable> _currentLink = new List<ITappable>();
+    private readonly Dictionary<int, HashSet<int>> _columnEmptyRows = new();
+    private List<TileData> _levelTiles = new();
 
     private static GameController _instance;
 
@@ -75,7 +76,12 @@ public class GameController : MonoBehaviour
 
     public void HandleOnRelease()
     {
-        if (_currentLink.Count < Utilities.LinkThreshold) return;
+        if (_currentLink.Count < Utilities.LinkThreshold)
+        {
+            _currentLink[^1].OnRelease();
+            _currentLink.Clear();
+            return;
+        }
         
         FillFallConfig();
         StartCoroutine(ProcessLink());
@@ -180,6 +186,27 @@ public class GameController : MonoBehaviour
         }
         
         _columnEmptyRows.Clear();
+    }
+    
+    public void AppendLevelTiles(TileData data)
+    {
+        _levelTiles.Add(data);
+    }
+
+    public void RemoveDataFromLevelTiles(TileData data)
+    {
+        _levelTiles.Remove(data);
+    }
+
+    private void OnDestroy()
+    {
+        var levelData = new LevelData()
+        {
+            levelConfig = levelConfig,
+            tiles = _levelTiles
+        };
+        
+        _levelManager.SaveLevel(levelData);
     }
 
     public ChipConfigManager GetChipConfigManager()

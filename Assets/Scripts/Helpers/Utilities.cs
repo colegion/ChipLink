@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using ScriptableObjects.Level;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -29,8 +30,7 @@ namespace Helpers
     [Serializable]
     public class LevelData
     {
-        public int width;
-        public int height;
+        public LevelConfig levelConfig;
         public List<TileData> tiles;
     }
 

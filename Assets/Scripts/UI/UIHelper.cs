@@ -26,6 +26,7 @@ namespace UI
         {
             _moveCount = config.moveLimit;
             moveLimitField.text = $"{_moveCount}";
+            LevelConfig.MergeDuplicateTargets(config.levelTargets);
             targetUIManager.Initialize(config.levelTargets);
         }
 
