@@ -14,6 +14,7 @@ namespace Helpers
     public enum PoolableTypes
     {
         BaseTile,
+        TargetUIElement,
     }
 
     public enum ChipType
@@ -64,18 +65,5 @@ namespace Helpers
             { Direction.DownLeft, new Vector2Int(-1, -1) },
             { Direction.DownRight, new Vector2Int(1, -1) }
         };
-    }
-
-    [Serializable]
-    public class ColumnFallConfig
-    {
-        public int columnIndex;
-        public int moveCount;
-
-        public ColumnFallConfig(int columnIndex, int moveCount)
-        {
-            this.columnIndex = columnIndex;
-            this.moveCount = moveCount;
-        }
     }
 }

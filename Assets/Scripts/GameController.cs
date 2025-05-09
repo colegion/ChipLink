@@ -7,6 +7,7 @@ using Helpers;
 using Interfaces;
 using Pool;
 using ScriptableObjects;
+using ScriptableObjects.Level;
 using UnityEngine;
 using Grid = GridSystem.Grid;
 
@@ -34,6 +35,8 @@ public class GameController : MonoBehaviour
     public int GridWidth => levelConfig.boardWidth;
     public int GridHeight => levelConfig.boardHeight;
 
+    public static event Action<LevelConfig> OnLevelLoaded;
+    public static event Action<LevelTargetConfig> OnSuccessfulMove;
     private void Awake()
     {
         if (_instance == null)
@@ -54,6 +57,7 @@ public class GameController : MonoBehaviour
         cameraController.SetGridSize(GridWidth, GridHeight);
         _levelManager = new LevelManager(puzzleParent);
         _chipConfigManager = ServiceLocator.Get<ChipConfigManager>();
+        OnLevelLoaded?.Invoke(levelConfig);
     }
 
     public void ReturnPooledObject(IPoolable poolObject)
