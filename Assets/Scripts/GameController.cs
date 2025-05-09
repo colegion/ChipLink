@@ -21,6 +21,7 @@ public class GameController : MonoBehaviour
     private LevelManager _levelManager;
     private ChipConfigManager _chipConfigManager;
     private Grid _grid;
+    private LevelProgressTracker _tracker;
 
     private readonly List<ITappable> _currentLink = new List<ITappable>();
     private readonly Dictionary<int, HashSet<int>> _columnEmptyRows = new();
@@ -59,6 +60,7 @@ public class GameController : MonoBehaviour
         cameraController.SetGridSize(GridWidth, GridHeight);
         _levelManager = new LevelManager(puzzleParent);
         _chipConfigManager = ServiceLocator.Get<ChipConfigManager>();
+        _tracker = new LevelProgressTracker(levelConfig);
         OnLevelLoaded?.Invoke(levelConfig);
     }
 
@@ -115,6 +117,7 @@ public class GameController : MonoBehaviour
         var config = new LevelTargetConfig();
         config.targetType = ((BaseTile)_currentLink[0]).ChipType;
         config.count = _currentLink.Count;
+        _tracker.RegisterMove(config);
         OnSuccessfulMove?.Invoke(config);
 
         yield return new WaitForSeconds(0.2f);
@@ -201,13 +204,21 @@ public class GameController : MonoBehaviour
 
     private void OnDestroy()
     {
-        var levelData = new LevelData()
+        levelConfig.moveLimit = _tracker.GetRemainingMoves();
+        levelConfig.levelTargets = _tracker.GetRemainingTargets();
+        
+        var levelData = new LevelData
         {
             levelConfig = levelConfig,
             tiles = _levelTiles
         };
-        
+
         _levelManager.SaveLevel(levelData);
+    }
+
+    public void OnLevelFinished(bool isSuccess)
+    {
+        OnGameOver?.Invoke(isSuccess);
     }
 
     public ChipConfigManager GetChipConfigManager()

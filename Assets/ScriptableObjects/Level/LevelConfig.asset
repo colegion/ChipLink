@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boardWidth: 8
   boardHeight: 8
-  moveLimit: 20
+  moveLimit: 1
   levelTargets:
   - targetType: 0
-    count: 25
+    count: 17
   - targetType: 2
-    count: 5
+    count: 16
