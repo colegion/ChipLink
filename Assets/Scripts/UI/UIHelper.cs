@@ -8,8 +8,10 @@ namespace UI
 {
     public class UIHelper : MonoBehaviour
     {
+        [SerializeField] private Canvas mainCanvas;
         [SerializeField] private TextMeshProUGUI moveLimitField;
         [SerializeField] private TargetUIManager targetUIManager;
+        [SerializeField] private UIScreenLoader screenLoader;
 
         private int _moveCount;
         private void OnEnable()
@@ -37,16 +39,23 @@ namespace UI
             targetUIManager.OnMove(moveConfig);
         }
 
+        private void HandleOnGameOver(bool isSuccess)
+        {
+            screenLoader.LoadPopup(isSuccess, mainCanvas.transform);
+        }
+
         private void AddListeners()
         {
             GameController.OnLevelLoaded += HandleOnLevelLoaded;
             GameController.OnSuccessfulMove += HandleOnMove;
+            GameController.OnGameOver += HandleOnGameOver;
         }
         
         private void RemoveListeners()
         {
             GameController.OnLevelLoaded -= HandleOnLevelLoaded;
             GameController.OnSuccessfulMove -= HandleOnMove;
+            GameController.OnGameOver -= HandleOnGameOver;
         }
     }
 }

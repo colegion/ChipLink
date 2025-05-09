@@ -38,6 +38,7 @@ public class GameController : MonoBehaviour
 
     public static event Action<LevelConfig> OnLevelLoaded;
     public static event Action<LevelTargetConfig> OnSuccessfulMove;
+    public static event Action<bool> OnGameOver;
     private void Awake()
     {
         if (_instance == null)
