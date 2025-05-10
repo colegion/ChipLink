@@ -63,11 +63,6 @@ namespace GridSystem
             tileView.MoveTowardsTarget(Grid.GetCell(_x, _y).GetTarget(), SetTransform);
         }
 
-        public void SetLayer(int layer)
-        {
-            _layer = layer;
-        }
-
         public void SetTransform()
         {
             if (Grid == null) Grid = ServiceLocator.Get<Grid>();
@@ -86,7 +81,7 @@ namespace GridSystem
             }
         }
 
-        private void SetPosition(Vector2Int position)
+        public void SetPosition(Vector2Int position)
         {
             GameController.Instance.RemoveDataFromLevelTiles(_tileData);
             Grid.ClearTileOfParentCell(this);

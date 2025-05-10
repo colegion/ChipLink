@@ -22,6 +22,8 @@ public class GameController : MonoBehaviour
     private LevelManager _levelManager;
     private ChipConfigManager _chipConfigManager;
     private Grid _grid;
+    private LinkSearcher _linkSearcher;
+    private ShuffleManager _shuffleManager;
     private LevelProgressTracker _tracker;
 
     private readonly List<ITappable> _currentLink = new List<ITappable>();
@@ -64,6 +66,9 @@ public class GameController : MonoBehaviour
         _levelManager = new LevelManager(puzzleParent);
         _chipConfigManager = ServiceLocator.Get<ChipConfigManager>();
         _tracker = new LevelProgressTracker(levelConfig);
+        _linkSearcher = new LinkSearcher(_grid);
+        ServiceLocator.Register(_linkSearcher);
+        _shuffleManager = ServiceLocator.Get<ShuffleManager>();
         inputController.ToggleInput(true);
         OnLevelLoaded?.Invoke(levelConfig);
     }
@@ -235,8 +240,13 @@ public class GameController : MonoBehaviour
 
             yield return new WaitForSeconds(0.1f);
         }
-
+        
         _columnEmptyRows.Clear();
+
+        if (!_linkSearcher.HasPossibleLink())
+        {
+            _shuffleManager.TriggerShuffle();
+        }
     }
 
     public void AppendLevelTiles(TileData data)
@@ -277,5 +287,17 @@ public class GameController : MonoBehaviour
     public Transform GetPuzzleParent()
     {
         return puzzleParent;
+    }
+
+    [ContextMenu("is link possible")]
+    public void TestLinkSearcher()
+    {
+        Debug.Log("Link possible? : " + _linkSearcher.HasPossibleLink());
+    }
+    
+    [ContextMenu("shuffle")]
+    public void TestShuffle()
+    {
+        _shuffleManager.TriggerShuffle();
     }
 }

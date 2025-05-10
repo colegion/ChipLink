@@ -10,15 +10,12 @@ namespace GridSystem
         private BaseCell[,] _board;
         public int Width { get; private set; }
         public int Height { get; private set; }
-        
-        private List<BaseTile> _tilesOnBoard;
 
         public Grid(int width, int height)
         {
             Width = width;
             Height = height;
             _board = new BaseCell[width, height];
-            _tilesOnBoard = new List<BaseTile>();
         }
 
         public void PlaceCell(BaseCell cell)
@@ -54,7 +51,6 @@ namespace GridSystem
             else
             {
                 cell.SetTile(tile);
-                _tilesOnBoard.Add(tile);
             }
         }
 
@@ -68,7 +64,6 @@ namespace GridSystem
             else
             {
                 cell.SetTileNull(tile.Layer);
-                _tilesOnBoard.Remove(tile);
             }
         }
         
@@ -87,11 +82,6 @@ namespace GridSystem
             Debug.Log($"Empty cells in column {column}: {string.Join(",", emptyRows)}");
 
             return emptyRows;
-        }
-
-        public List<BaseTile> GetAllTilesOnBoard()
-        {
-            return _tilesOnBoard;
         }
         
         public Transform GetCellTargetByCoordinate(int x, int y)
