@@ -1138,6 +1138,16 @@ PrefabInstance:
       propertyPath: screenLoader
       value: 
       objectReference: {fileID: 653943827}
+    - target: {fileID: 434253002088739153, guid: 9a05f3f107adbc4488ab0fd52dab6047,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: -189
+      objectReference: {fileID: 0}
+    - target: {fileID: 434253002088739153, guid: 9a05f3f107adbc4488ab0fd52dab6047,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 607039522647788182, guid: 9a05f3f107adbc4488ab0fd52dab6047,
         type: 3}
       propertyPath: m_Name
@@ -1172,6 +1182,11 @@ PrefabInstance:
         type: 3}
       propertyPath: baseDelay
       value: 0.08
+      objectReference: {fileID: 0}
+    - target: {fileID: 5810802817926147141, guid: 9a05f3f107adbc4488ab0fd52dab6047,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -96
       objectReference: {fileID: 0}
     - target: {fileID: 5941469245933757515, guid: 9a05f3f107adbc4488ab0fd52dab6047,
         type: 3}
