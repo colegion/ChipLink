@@ -14,8 +14,9 @@ namespace UI
     
             if (popupPrefab != null)
             {
-                var popupInstance = GameObject.Instantiate(popupPrefab, parent);
+                var popupInstance = Instantiate(popupPrefab, parent);
                 popupInstance.transform.localPosition = Vector3.zero;
+                popupInstance.SetActive(true);
             }
             else
             {

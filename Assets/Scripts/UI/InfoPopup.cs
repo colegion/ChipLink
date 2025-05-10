@@ -1,3 +1,4 @@
+using Controllers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -11,17 +12,18 @@ namespace UI
 
         private void OnEnable()
         {
-            popupButton.onClick.AddListener(LoadScene);
+            popupButton.onClick.AddListener(Restart);
         }
 
         private void OnDisable()
         {
-            popupButton.onClick.RemoveListener(LoadScene);
+            popupButton.onClick.RemoveListener(Restart);
         }
         
-        private void LoadScene()
+        private void Restart()
         {
-            SceneManager.LoadScene("Game");
+            GameController.Instance.RestartLevel();
+            gameObject.SetActive(false);
         }
     }
 }

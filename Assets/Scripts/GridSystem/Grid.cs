@@ -84,9 +84,21 @@ namespace GridSystem
             return emptyRows;
         }
         
-        public Transform GetCellTargetByCoordinate(int x, int y)
+        public void Clear()
         {
-            return _board[x, y].GetTarget();
+            for (int x = 0; x < Width; x++)
+            {
+                for (int y = 0; y < Height; y++)
+                {
+                    var cell = _board[x, y];
+                    if (cell != null)
+                    {
+                        cell.SetTileNull(Utilities.DefaultChipLayer);
+                    }
+                }
+            }
+
+            Debug.Log("[Grid] Cleared all tile references in the grid.");
         }
 
         public bool IsCoordinateValid(int x, int y) => x >= 0 && x < Width && y >= 0 && y < Height;

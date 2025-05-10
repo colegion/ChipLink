@@ -317,6 +317,37 @@ Transform:
   - {fileID: 1597862063}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &921266753
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 921266754}
+  m_Layer: 0
+  m_Name: PuzzleParent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &921266754
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 921266753}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &974262763 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7117085565684909371, guid: 6b82ae5100d15524d80436756fc23637,
@@ -967,6 +998,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5330403772977953965, guid: 19e434b9cc0906145b7bd46e29f90e28,
         type: 3}
+      propertyPath: puzzleParent
+      value: 
+      objectReference: {fileID: 921266754}
+    - target: {fileID: 5330403772977953965, guid: 19e434b9cc0906145b7bd46e29f90e28,
+        type: 3}
       propertyPath: poolController
       value: 
       objectReference: {fileID: 1201177263}
@@ -1577,6 +1613,7 @@ SceneRoots:
   - {fileID: 6554642898953457855}
   - {fileID: 4064553163393900492}
   - {fileID: 911995202}
+  - {fileID: 921266754}
   - {fileID: 1560361218853308285}
   - {fileID: 1728753317009921638}
   - {fileID: 3271519752715664867}

@@ -22,6 +22,8 @@ public class Bootstrapper : MonoBehaviour
         {
             yield return null;
         }
+        
+        ServiceLocator.Register(configManager);
 
         Debug.Log("Bootstrapper: Registering dependencies...");
 
@@ -50,6 +52,6 @@ public class Bootstrapper : MonoBehaviour
         }
 
         Debug.Log("Bootstrapper: Dependencies injected, loading level...");
-        GameController.Instance.LoadLevel();
+        GameController.Instance.LoadFields();
     }
 }

@@ -6,14 +6,8 @@ using Grid = GridSystem.Grid;
 
 public class LinkSearcher
 {
-    private readonly Grid _grid;
-    private readonly int _threshold;
-
-    public LinkSearcher(Grid grid)
-    {
-        _grid = grid;
-        _threshold = Utilities.LinkThreshold;
-    }
+    private readonly Grid _grid = ServiceLocator.Get<Grid>();
+    private readonly int _threshold = Utilities.LinkThreshold;
 
     public bool HasPossibleLink()
     {

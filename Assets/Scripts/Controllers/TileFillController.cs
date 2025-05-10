@@ -41,7 +41,7 @@ namespace Controllers
                     if (newTile != null)
                     {
                         int targetZ = emptyRowIndex;
-                        newTile.transform.SetParent(puzzleParent);
+                        newTile.transform.SetParent(GameController.Instance.GetPuzzleParent());
                         newTile.ConfigureSelf(_configManager.GetRandomConfig(), column, targetZ);
                         float spawnHeight = _grid.Height + 1f;
                         Vector3 spawnPos = new Vector3(column, 0, spawnHeight);

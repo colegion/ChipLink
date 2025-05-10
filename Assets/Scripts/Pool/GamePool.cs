@@ -28,6 +28,7 @@ namespace Pool
             {
                 var poolable = _pools[type].Dequeue();
                 poolable.OnFetchFromPool();
+                poolable.GetGameObject().SetActive(true);
                 return poolable;
             }
 

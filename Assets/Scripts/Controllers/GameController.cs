@@ -18,23 +18,20 @@ namespace Controllers
         [SerializeField] private LevelConfig levelConfig;
         [SerializeField] private Transform puzzleParent;
         [SerializeField] private CameraController cameraController;
-        [SerializeField] private PoolController poolController;
         [SerializeField] private InputController inputController;
 
+        private PoolController _poolController;
         private LevelManager _levelManager;
-        private ChipConfigManager _chipConfigManager;
-        private Grid _grid;
         private LinkSearcher _linkSearcher;
         private ShuffleController _shuffleController;
         private LevelProgressTracker _tracker;
-
         private TileLinkController _linkController;
         private TileHighlightController _highlightController;
         private TileFallController _fallController;
         private TileFillController _fillController;
-        
+
         private List<TileData> _levelTiles = new();
-    
+
         private static GameController _instance;
 
         public static GameController Instance
@@ -62,30 +59,29 @@ namespace Controllers
             }
         }
 
-        public void LoadLevel()
+        public void LoadFields()
         {
-            _grid = ServiceLocator.Get<Grid>();
-            poolController.Initialize();
+            _poolController = ServiceLocator.Get<PoolController>();
+            _poolController.Initialize();
             cameraController.SetGridSize(GridWidth, GridHeight);
-            _levelManager = new LevelManager(puzzleParent);
-            _chipConfigManager = ServiceLocator.Get<ChipConfigManager>();
-            _tracker = new LevelProgressTracker(levelConfig);
             _linkController = ServiceLocator.Get<TileLinkController>();
             _fallController = ServiceLocator.Get<TileFallController>();
             _fillController = ServiceLocator.Get<TileFillController>();
             _highlightController = ServiceLocator.Get<TileHighlightController>();
-            _linkSearcher = new LinkSearcher(_grid);
+            _linkSearcher = new LinkSearcher();
             ServiceLocator.Register(_linkSearcher);
             _shuffleController = ServiceLocator.Get<ShuffleController>();
+            _levelManager = new LevelManager(puzzleParent);
+            _tracker = new LevelProgressTracker(levelConfig);
             inputController.ToggleInput(true);
             OnLevelLoaded?.Invoke(levelConfig);
         }
 
         public void ReturnPooledObject(IPoolable poolObject)
         {
-            poolController.ReturnPooledObject(poolObject);
+            _poolController.ReturnPooledObject(poolObject);
         }
-    
+
         public void TryAppendToCurrentLink(ITappable tappable)
         {
             _linkController.TryAppendToCurrentLink(tappable);
@@ -95,7 +91,7 @@ namespace Controllers
         {
             _highlightController.HighlightAdjacentTiles(origin);
         }
-        
+
         public void HandleOnRelease()
         {
             StartCoroutine(HandleOnReleaseRoutine());
@@ -104,6 +100,8 @@ namespace Controllers
         private IEnumerator HandleOnReleaseRoutine()
         {
             if (!_linkController.IsLinkProcessable()) yield break;
+
+            inputController.ToggleInput(false);
 
             _highlightController.ClearPreviousHighlights();
             _fallController.FillFallConfig(_linkController.GetCurrentLink());
@@ -128,18 +126,20 @@ namespace Controllers
             if (!linkProcessed)
                 yield break;
 
-            _fallController.TriggerDrop(); 
-            yield return new WaitForSeconds(0.5f); 
+            _fallController.TriggerDrop();
+            yield return new WaitForSeconds(0.5f);
             _fillController.TriggerFillProcess(_fallController.GetEmptyRowsByColumn(), puzzleParent);
-            yield return new WaitForSeconds(0.5f); 
-            
+            yield return new WaitForSeconds(0.5f);
+
             if (!_linkSearcher.HasPossibleLink())
             {
                 _shuffleController.TriggerShuffle();
                 yield return new WaitForSeconds(0.5f);
             }
+
+            inputController.ToggleInput(true);
         }
-        
+
 
         public void AppendLevelTiles(TileData data)
         {
@@ -168,12 +168,33 @@ namespace Controllers
         public void OnLevelFinished(bool isSuccess)
         {
             inputController.ToggleInput(false);
+            _levelManager.ClearProgress();
             OnGameOver?.Invoke(isSuccess);
         }
 
-        public ChipConfigManager GetChipConfigManager()
+        public void RestartLevel()
         {
-            return _chipConfigManager;
+            _levelTiles.Clear();
+            Transform[] children = new Transform[puzzleParent.childCount];
+            for (int i = 0; i < children.Length; i++)
+            {
+                children[i] = puzzleParent.GetChild(i);
+            }
+
+            foreach (Transform child in children)
+            {
+                var poolable = child.GetComponent<BaseTile>();
+                if (poolable != null)
+                {
+                    ReturnPooledObject(poolable);
+                }
+            }
+            
+            ServiceLocator.Get<Grid>().Clear();
+            _tracker.Reset();
+            _levelManager.CreateRandomBoard(GridWidth, GridHeight);
+            inputController.ToggleInput(true);
+            OnLevelLoaded?.Invoke(levelConfig);
         }
 
         public Transform GetPuzzleParent()
@@ -186,7 +207,7 @@ namespace Controllers
         {
             Debug.Log("Link possible? : " + _linkSearcher.HasPossibleLink());
         }
-    
+
         [ContextMenu("shuffle")]
         public void TestShuffle()
         {

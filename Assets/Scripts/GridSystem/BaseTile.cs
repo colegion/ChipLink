@@ -116,6 +116,7 @@ namespace GridSystem
             tileView.ToggleVisuals(false);
             _position = Vector2Int.zero;
             _tileData = null;
+            gameObject.SetActive(false);
         }
 
         public Vector2Int GetPosition()

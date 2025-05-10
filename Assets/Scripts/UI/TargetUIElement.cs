@@ -49,6 +49,8 @@ namespace UI
         public void OnFetchFromPool()
         {
             visuals.SetActive(true);
+            transform.rotation = Quaternion.Euler(Vector3.zero);
+            transform.localScale = Vector3.one;
         }
 
         public void OnReturnPool()

@@ -131,7 +131,7 @@ namespace Helpers
             }
         }
 
-        private void GenerateDefaultBoard()
+        public void GenerateDefaultBoard()
         {
             int width = GameController.Instance.GridWidth;
             int height = GameController.Instance.GridHeight;
@@ -170,7 +170,7 @@ namespace Helpers
             Debug.Log($"[LevelManager] Created {width}x{height} grid of cells.");
         }
 
-        private void CreateRandomBoard(int width, int height)
+        public void CreateRandomBoard(int width, int height)
         {
             var tileFactory = ServiceLocator.Get<TileFactory>();
             var configManager = ServiceLocator.Get<ChipConfigManager>();
@@ -187,6 +187,22 @@ namespace Helpers
                 }
             }
         }
+        
+        public void ClearProgress()
+        {
+            string path = Path.Combine(Application.persistentDataPath, PersistentLevelFolder, PersistentLevelFileName);
+
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+                Debug.Log("[LevelManager] Cleared saved level progress.");
+            }
+            else
+            {
+                Debug.Log("[LevelManager] No saved level to clear.");
+            }
+        }
+
 
         #endregion
     }
