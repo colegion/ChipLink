@@ -17,6 +17,6 @@ MonoBehaviour:
   moveLimit: 20
   levelTargets:
   - targetType: 0
-    count: 14
+    count: 20
   - targetType: 2
-    count: 10
+    count: 20
