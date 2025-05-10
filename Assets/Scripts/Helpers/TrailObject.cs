@@ -21,13 +21,13 @@ namespace Helpers
             Camera cam = Camera.main;
             Vector2 screenPos = RectTransformUtility.WorldToScreenPoint(cam, uiTarget.position);
             Ray ray = cam.ScreenPointToRay(screenPos);
-            float targetY = 0f;
-            float distance = (targetY - ray.origin.y) / ray.direction.y;
+            float trailY = transform.position.y; 
+            float distance = (trailY - ray.origin.y) / ray.direction.y;
             Vector3 worldPos = ray.GetPoint(distance);
-
-            transform.DOJump(worldPos, 0.5f, 1, 0.3f)
-                .SetEase(Ease.OutQuad)
-                .OnComplete(() => onComplete?.Invoke());
+            Sequence seq = DOTween.Sequence();
+            seq.Append(transform.DOJump(worldPos, 1f, 1, 0.3f).SetEase(Ease.OutQuad));
+            seq.Join(transform.DOScale(Vector3.zero, 0.3f).SetEase(Ease.InCubic));
+            seq.OnComplete(() => onComplete?.Invoke());
         }
         
         public void OnPooled()

@@ -127,9 +127,9 @@ namespace Controllers
                 yield break;
 
             _fallController.TriggerDrop();
-            yield return new WaitForSeconds(0.5f);
-            _fillController.TriggerFillProcess(_fallController.GetEmptyRowsByColumn(), puzzleParent);
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.3f);
+            _fillController.TriggerFillProcess(_fallController.GetEmptyRowsByColumn());
+            yield return new WaitForSeconds(0.3f);
 
             if (!_linkSearcher.HasPossibleLink())
             {

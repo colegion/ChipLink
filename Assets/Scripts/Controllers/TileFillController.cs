@@ -22,12 +22,12 @@ namespace Controllers
             _grid = ServiceLocator.Get<Grid>();
         }
 
-        public void TriggerFillProcess(Dictionary<int, HashSet<int>> columnEmptyRows, Transform puzzleParent)
+        public void TriggerFillProcess(Dictionary<int, HashSet<int>> columnEmptyRows)
         {
-            StartCoroutine(SpawnNewTiles(columnEmptyRows, puzzleParent));
+            StartCoroutine(SpawnNewTiles(columnEmptyRows));
         }
         
-        private IEnumerator SpawnNewTiles(Dictionary<int, HashSet<int>> columnEmptyRows, Transform puzzleParent)
+        private IEnumerator SpawnNewTiles(Dictionary<int, HashSet<int>> columnEmptyRows)
         {
             foreach (var kvp in columnEmptyRows)
             {
@@ -50,10 +50,10 @@ namespace Controllers
                         newTile.UpdatePosition(new Vector2Int(column, targetZ));
                     }
 
-                    yield return new WaitForSeconds(0.1f);
+                    yield return new WaitForSeconds(0.03f);
                 }
 
-                yield return new WaitForSeconds(0.1f);
+                yield return new WaitForSeconds(0.06f);
             }
             
             columnEmptyRows.Clear();

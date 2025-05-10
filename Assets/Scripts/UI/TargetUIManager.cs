@@ -64,7 +64,7 @@ namespace UI
             float randomX = Random.Range(-offset, offset);
             float randomZ = Random.Range(-offset, offset);
 
-            return worldCenter + new Vector3(randomX, 2, randomZ);
+            return worldCenter + new Vector3(randomX, 6, randomZ);
         }
 
         public void Reset()

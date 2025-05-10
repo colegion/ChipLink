@@ -65,10 +65,10 @@ namespace Controllers
                     }
                 }
 
-                yield return new WaitForSeconds(0.09f);
+                yield return new WaitForSeconds(0.03f);
             }
 
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(0.06f);
         }
 
         public Dictionary<int, HashSet<int>> GetEmptyRowsByColumn()

@@ -1158,6 +1158,11 @@ PrefabInstance:
       propertyPath: m_SortingOrder
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 3085593545355004621, guid: 9a05f3f107adbc4488ab0fd52dab6047,
+        type: 3}
+      propertyPath: m_PlaneDistance
+      value: 13
+      objectReference: {fileID: 0}
     - target: {fileID: 5941469245933757515, guid: 9a05f3f107adbc4488ab0fd52dab6047,
         type: 3}
       propertyPath: m_Pivot.x
