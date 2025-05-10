@@ -34,9 +34,9 @@ namespace GridSystem
 
         public void Disappear(Action onComplete)
         {
-            transform.DOPunchScale(new Vector3(1.01f, 1.01f, 1.01f), .12f).OnComplete(() =>
+            transform.DOPunchScale(new Vector3(1.01f, 1.01f, 1.01f), .09f).OnComplete(() =>
             {
-                transform.DOScale(Vector3.zero, 0.12f).SetEase(Ease.InBounce).OnComplete(() =>
+                transform.DOScale(Vector3.zero, 0.09f).SetEase(Ease.InBounce).OnComplete(() =>
                 {
                     onComplete?.Invoke();
                     transform.localScale = Vector3.one;
@@ -55,7 +55,7 @@ namespace GridSystem
                     tileRenderer.color = new Color(0.5f, 0.5f, 0.5f, 0.75f);
                     break;
                 case HighlightType.Bright:
-                    tileRenderer.color = Color.yellow;
+                    tileRenderer.color = new Color(1f, 1f, 0.4f);
                     break;
             }
         }

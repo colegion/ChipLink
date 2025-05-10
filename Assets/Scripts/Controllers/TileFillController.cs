@@ -41,12 +41,15 @@ namespace Controllers
                     if (newTile != null)
                     {
                         int targetZ = emptyRowIndex;
-                        newTile.transform.SetParent(GameController.Instance.GetPuzzleParent());
+                        var parent = GameController.Instance.GetPuzzleParent();
+                        newTile.transform.SetParent(parent);
                         newTile.ConfigureSelf(_configManager.GetRandomConfig(), column, targetZ);
-                        float spawnHeight = _grid.Height + 1f;
-                        Vector3 spawnPos = new Vector3(column, 0, spawnHeight);
+                        var topmostCell = _grid.GetCell(column, _grid.Height-1);
+                        float spawnX = topmostCell.transform.position.x;
+                        float spawnHeight = topmostCell.transform.position.z + 1f;
+                        Vector3 spawnPos = new Vector3(spawnX, 0, spawnHeight);
                         newTile.transform.position = spawnPos;
-
+                        yield return new WaitForSeconds(0.3f);
                         newTile.UpdatePosition(new Vector2Int(column, targetZ));
                     }
 

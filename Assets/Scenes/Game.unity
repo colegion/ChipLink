@@ -1163,6 +1163,16 @@ PrefabInstance:
       propertyPath: m_PlaneDistance
       value: 13
       objectReference: {fileID: 0}
+    - target: {fileID: 5592437532943391365, guid: 9a05f3f107adbc4488ab0fd52dab6047,
+        type: 3}
+      propertyPath: offset
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 5592437532943391365, guid: 9a05f3f107adbc4488ab0fd52dab6047,
+        type: 3}
+      propertyPath: baseDelay
+      value: 0.08
+      objectReference: {fileID: 0}
     - target: {fileID: 5941469245933757515, guid: 9a05f3f107adbc4488ab0fd52dab6047,
         type: 3}
       propertyPath: m_Pivot.x
