@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Controllers;
 using Helpers;
 using Interfaces;
 using Pool;
@@ -29,10 +30,18 @@ public class Bootstrapper : MonoBehaviour
 
         var poolController = FindObjectOfType<PoolController>();
         var tileFactory = FindObjectOfType<TileFactory>();
-        var shuffleManager = FindObjectOfType<ShuffleManager>();
+        var highlightController = FindObjectOfType<TileHighlightController>();
+        var linkController = FindObjectOfType<TileLinkController>();
+        var fallController = FindObjectOfType<TileFallController>();
+        var fillController = FindObjectOfType<TileFillController>();
+        var shuffleManager = FindObjectOfType<ShuffleController>();
         
         ServiceLocator.Register(poolController);
         ServiceLocator.Register(tileFactory);
+        ServiceLocator.Register(highlightController);
+        ServiceLocator.Register(linkController);
+        ServiceLocator.Register(fallController);
+        ServiceLocator.Register(fillController);
         ServiceLocator.Register(shuffleManager);
         
         foreach (var injectable in FindObjectsOfType<MonoBehaviour>().OfType<IInjectable>())
